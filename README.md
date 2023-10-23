@@ -20,17 +20,44 @@ In simpler terms unit testing is isolating the smallest sets of code and testing
 
 
 
-    yarn add -D vitest vite @vitejs/plugin-react react-test-renderer @testing-library/react @testing-library/jest-dom jsdom 
+    yarn add -D vitest vite jsdom 
 
 
-you can ignore `@vitejs/plugin-react react-test-renderer @testing-library/react @testing-library/jest-dom` if you won't test react
-and if you use typescript paths (absolute imports) add `vite-tsconfig-paths`
+to test react components or hooks run <br/>
+
+
+
+    yarn add -D @vitejs/plugin-react react-test-renderer @testing-library/react @testing-library/jest-dom 
+
+
+
+
+
+if you have typescript paths (absolute imports) configured in your project run
+
+
+
+    yarn add -D vite-tsconfig-paths 
+
+
+
+
 ## Configuring vitest
-
 ### Make a file in the root of the project called `vitest.config.ts` with the following code
 
+    // to only use absolute imports defined in TS
+
     import { defineConfig } from 'vitest/config';  
-    import react from '@vitejs/plugin-react';  
+    import tsconfigPaths from 'vite-tsconfig-paths';  
+
+    export default defineConfig({  
+      plugins: [tsconfigPaths()]
+    });
+
+    // to test react use the following
+
+    import { defineConfig } from 'vitest/config';  
+    import react from '@vitejs/plugin-react';
     import tsconfigPaths from 'vite-tsconfig-paths';  
     
     export default defineConfig({  
@@ -40,13 +67,15 @@ and if you use typescript paths (absolute imports) add `vite-tsconfig-paths`
        setupFiles: ['./tests/setupTests.ts'],  
       },  
     });
-`@vitejs/plugin-react` enables HMR for react in development.
-`vite-tsconfig-paths` makes vite use the paths defined in your tsconfig.
-`environment: 'jsdom'` by default the environment is `node` which means that any code meant for the browser can't run in the test, so we use jsdom which provides a browser like environment to run the test in it.
 
-### and `tests/setupTests.ts`    with the following code
+`@vitejs/plugin-react` enables HMR for react in development.<br/>
+`vite-tsconfig-paths` makes vite use the paths defined in your tsconfig.<br/>
+`environment: 'jsdom'` by default the environment is `node` which means that any code meant for the browser can't run in the test
+, so we use jsdom which provides a browser like environment to run the test in it.
 
-    import '@testing-library/jest-dom/vitest';  
+### and `tests/setupTests.ts`    with the following code (in case of React testing)
+
+    import '@testing-library/jest-dom/vitest';
     import { afterEach } from 'vitest';  
     import { cleanup } from '@testing-library/react';
     
@@ -54,7 +83,7 @@ and if you use typescript paths (absolute imports) add `vite-tsconfig-paths`
       cleanup();  
     });
 
-> [The `@testing-library/jest-dom/vitest` library provides a set of custom jest/vitest matchers that you can use to extend jest/vitest. These will make your tests more declarative, clear to read and to maintain.](https://www.npmjs.com/package/@testing-library/jest-dom#:~:text=The%20@testing-library/jest-dom%20library%20provides%20a%20set%20of%20custom%20jest%20matchers%20that%20you%20can%20use%20to%20extend%20jest.%20These%20will%20make%20your%20tests%20more%20declarative,%20clear%20to%20read%20and%20to%20maintain.)
+The `@testing-library/jest-dom/vitest` library provides a set of custom jest/vitest matchers that you can use to extend jest/vitest. These will make your tests more declarative, clear to read and to maintain. Check the docs [here](https://www.npmjs.com/package/@testing-library/jest-dom) to see the added matchers
 
 the after each cleanup configures vitest and @testing-library/react to clean up after running every test so that each test can run on a clean slate
 ### and the following script to your `package.json`
