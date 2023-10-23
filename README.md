@@ -8,7 +8,7 @@ In simpler terms unit testing is isolating the smallest sets of code and testing
 ## What you need to get started?
 
 1. a testing framework like Vitest or Jest (personally I prefer vitest).
-2. a project to test. I provided a repo to get started with at [here](https://github.com/JanKaram2020/vitest-tutorial) but you can start with any project
+2. a project to test. I provided a repo to get started with at [here](https://github.com/JanKaram2020/vitest-tutorial) ( start with main and compare your branch at every step with "steps" branch) but you can start with any project
 
 ## Why Vitest not Jest ?
 1. It's significantly faster than Jest.
